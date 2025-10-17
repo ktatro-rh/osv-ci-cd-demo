@@ -48,6 +48,9 @@
         namespace: "{{ vm_project }}"
       register: vm
 
+    - name: debug vm
+      debug: vm
+
     - name: Set a variable
       when: vm is not defined
       ansible.builtin.set_fact:
