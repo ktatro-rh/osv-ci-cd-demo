@@ -62,8 +62,8 @@
           vm.kubevirt.io/template.namespace: "{{ os_images_template_namespace }}"
           vm.kubevirt.io/template.revision: "{{ os_images_template_revision }}"
           vm.kubevirt.io/template.version: "{{ os_images_template_version }}"
-          deployment: " {{ deployment_name }}"
-          deployment_version: " {{ deployment_version }}"
+          deployment: "{{ deployment_name }}"
+          deployment_version: "{{ deployment_version }}"
 
         data_volume_templates:
           - kind: 'DataVolume'
