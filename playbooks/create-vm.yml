@@ -38,10 +38,14 @@
     deployment_name: my-application
     deployment_version: 1.0.0
 
+    #k8s
+    service_name: "{{ deployment_name }}-{{ deployment_version }}-service"
+    route_name: "{{ deployment_name }}-{{ deployment_version }}-route"
+
   tasks:
     - name: Create virtual machine
       redhat.openshift_virtualization.kubevirt_vm:
-        name: "{{ vm_name }}"
+        name: "{{ vm_name }}-{{deployment_version}}"
         namespace: "{{ vm_project }}"
         api_key: "{{ api_key }}"
         running: true
@@ -119,3 +123,11 @@
                   password: {{ cloud_init_password }}
                   chpasswd: { expire: False }
               name: 'cloudinitdisk'
+    - name: create service
+      kubernetes.core.k8s:
+        definition: "{{ lookup('template', '../openshift-resources/create-service.yml') | from_yaml }}"
+        state: present      
+    - name: create route
+      kubernetes.core.k8s:
+        definition: "{{ lookup('template', '../openshift-resources/create-route.yml') | from_yaml }}"
+        state: present  
