@@ -31,7 +31,6 @@
     cloud_init_password: redhat
 
     # API access
-    api_key: "{{ lookup('env', 'OPENSHIFT_API_KEY') }}"
     validate_certs: false
 
     #application specifics
@@ -47,7 +46,6 @@
       redhat.openshift_virtualization.kubevirt_vm:
         name: "{{ vm_name }}-{{deployment_version}}"
         namespace: "{{ vm_project }}"
-        api_key: "{{ api_key }}"
         running: true
         validate_certs: "{{ validate_certs }}"
         state: present
