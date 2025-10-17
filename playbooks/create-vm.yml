@@ -15,7 +15,7 @@
     cpu_threads: 1
 
     # Templates and images
-    os_images_template: rhel8
+    os_images_template: fedora
     os_images_project: openshift-virtualization-os-images
     os_images_flavor: small
     os_images_workload: server
