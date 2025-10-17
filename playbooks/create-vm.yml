@@ -53,14 +53,14 @@
         var: vm
 
     - name: Set a variable
-      when: vm.resources is not defined
+      when: vm.resources | length == 0
       ansible.builtin.set_fact:
         vm_name_set: "{{vm_name}}"
         service_name: "{{ vm_name }}-service"
         route_name: "{{ vm_name }}-route"
     
     - name: Set a variable
-      when: vm.resources is defined
+      when: vm.resources | length > 0
       ansible.builtin.set_fact:
         vm_name_set: "{{vm_name}}-{{ deployment_version }}"
         service_name: "{{ vm_name }}-{{ deployment_version }}-service"
