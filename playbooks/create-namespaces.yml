@@ -1,0 +1,19 @@
+---
+- hosts: localhost
+  collections:
+  - kubernetes.core
+
+  tasks:
+  - name: Create a k8s namespace
+    kubernetes.core.k8s:
+      name: demo-test
+      api_version: v1
+      kind: Namespace
+      state: present
+
+  - name: Create a k8s namespace
+    kubernetes.core.k8s:
+      name: demo-prod
+      api_version: v1
+      kind: Namespace
+      state: present
