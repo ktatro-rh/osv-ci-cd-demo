@@ -49,7 +49,8 @@
       register: vm
 
     - name: debug vm
-      debug: vm
+      debug: 
+        var: vm
 
     - name: Set a variable
       when: vm is not defined
