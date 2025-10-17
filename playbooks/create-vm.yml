@@ -80,13 +80,6 @@
                     storage: "{{ storage_size }}"
 
         spec:
-          accessCredentials:
-            - sshPublicKey:
-                propagationMethod:
-                  noCloud: {}
-                source:
-                  secret:
-                    secretName: "{{ ssh_key_secret }}"
           domain:
             cpu:
               cores: "{{ cpu_cores }}"
