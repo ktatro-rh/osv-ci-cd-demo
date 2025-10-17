@@ -1,5 +1,5 @@
 ---
-- name: Create a VM on OpenShift Virtualization
+- name: Update the VM
   hosts: localhost
   connection: local
   gather_facts: false
@@ -9,10 +9,6 @@
     vm_name: test-vm
     vm_project: default
     deployment_version: 1.0.0
-
-    #k8s
-    service_name: "{{ deployment_name }}-{{ deployment_version }}-service"
-    route_name: "{{ deployment_name }}-{{ deployment_version }}-route"
 
   tasks:
     - name: update vm 
