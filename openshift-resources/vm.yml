@@ -1,1 +1,16 @@
----
+apiVersion: kubevirt.io/v1
+kind: VirtualMachine
+metadata:
+  name: "{{ vm_name }}"
+spec:
+  dataVolumeTemplates:
+    - kind: DataVolume
+      metadata:
+        creationTimestamp: null
+        name: "{{ vm_name }}-{{deployment_version}}"
+  template:
+    spec:
+      volumes:
+        - dataVolume:
+            name: "{{ vm_name }}-{{deployment_version}}"
+          name: rootdisk      

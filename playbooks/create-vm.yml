@@ -27,7 +27,6 @@
     network_interface1_name: eth0
 
     # Cloud-init / Access
-    ssh_key_secret: my-ssh-key-secret
     cloud_init_password: redhat
 
     # API access
@@ -38,13 +37,35 @@
     deployment_version: 1.0.0
 
     #k8s
-    service_name: "{{ deployment_name }}-{{ deployment_version }}-service"
-    route_name: "{{ deployment_name }}-{{ deployment_version }}-route"
+
 
   tasks:
+    - name: get vm
+      kubernetes.core.k8s_info:
+        api_version: kubevirt.io/v1
+        kind: VirtualMachine
+        name: "{{ vm_name }}"
+        namespace: "{{ vm_project }}"
+      register: vm
+
+    - name: Set a variable
+      when: vm is not defined
+      ansible.builtin.set_fact:
+        vm_name_set: "{{vm_name}}"
+        service_name: "{{ vm_name }}-service"
+        route_name: "{{ vm_name }}-route"
+    
+    - name: Set a variable
+      when: vm is defined
+      ansible.builtin.set_fact:
+        vm_name_set: "{{vm_name}}-{{ deployment_version }}"
+        service_name: "{{ vm_name }}-{{ deployment_version }}-service"
+        route_name: "{{ vm_name }}-{{ deployment_version }}-route"
+        
+
     - name: Create virtual machine
       redhat.openshift_virtualization.kubevirt_vm:
-        name: "{{ vm_name }}-{{deployment_version}}"
+        name: "{{ vm_name_set }}"
         namespace: "{{ vm_project }}"
         running: true
         validate_certs: "{{ validate_certs }}"
