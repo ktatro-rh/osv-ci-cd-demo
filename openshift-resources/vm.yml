@@ -2,6 +2,7 @@ apiVersion: kubevirt.io/v1
 kind: VirtualMachine
 metadata:
   name: "{{ vm_name }}"
+  namespace: "{{ vm_project }}
 spec:
   dataVolumeTemplates:
     - kind: DataVolume

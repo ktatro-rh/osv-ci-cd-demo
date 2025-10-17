@@ -8,33 +8,7 @@
     # VM details
     vm_name: test-vm
     vm_project: default
-    storage_size: 30Gi
-    memory_size: 2Gi
-    cpu_cores: 2
-    cpu_sockets: 1
-    cpu_threads: 1
 
-    # Templates and images
-    os_images_template: fedora
-    os_images_project: openshift-virtualization-os-images
-    os_images_flavor: small
-    os_images_workload: server
-    os_images_template_namespace: openshift
-    os_images_template_revision: "1"
-    os_images_template_version: v1
-
-    # Network
-    network_interface1_name: eth0
-
-    # Cloud-init / Access
-    ssh_key_secret: my-ssh-key-secret
-    cloud_init_password: redhat
-
-    # API access
-    validate_certs: false
-
-    #application specifics
-    deployment_name: my-application
     deployment_version: 1.0.0
 
     #k8s
