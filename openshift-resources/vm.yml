@@ -7,7 +7,6 @@ spec:
   dataVolumeTemplates:
     - kind: DataVolume
       metadata:
-        creationTimestamp: null
         name: "{{ vm_name }}-{{deployment_version}}"
   template:
     spec:

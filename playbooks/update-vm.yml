@@ -8,7 +8,6 @@
     # VM details
     vm_name: test-vm
     vm_project: default
-
     deployment_version: 1.0.0
 
     #k8s
