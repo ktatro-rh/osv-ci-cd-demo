@@ -36,9 +36,6 @@
     deployment_name: my-application
     deployment_version: 1.0.0
 
-    #k8s
-
-
   tasks:
     - name: get vm
       kubernetes.core.k8s_info:
