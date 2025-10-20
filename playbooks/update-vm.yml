@@ -23,5 +23,5 @@
           path: /spec/dataVolumeTemplates/0/metadata/name
           value: "{{ vm_name }}-{{ deployment_version }}"
         - op: replace
-          path: /spec/template/spec/volumes/dataVolume/0/name
+          path: /spec/template/spec/volumes/0/dataVolume/name
           value: "{{ vm_name }}-{{ deployment_version }}"
