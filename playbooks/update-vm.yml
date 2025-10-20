@@ -14,7 +14,7 @@
 
     - name: Apply multiple patch operations to an existing Pod
       kubernetes.core.k8s_json_patch:
-        apiVersion: kubevirt.io/v1
+        api_version: kubevirt.io/v1
         kind: VirtualMachine
         namespace: "{{ vm_project }}"
         name: "{{ vm_name }}"
