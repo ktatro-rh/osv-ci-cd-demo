@@ -58,6 +58,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: create-tar-archive
+  namespace: demo-test
 spec:
   workspaces:
     - name: source
