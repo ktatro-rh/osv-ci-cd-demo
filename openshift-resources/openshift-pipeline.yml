@@ -52,6 +52,7 @@ spec:
       taskRef:
         kind: Task
         name: timestamp-task
+        apiVersion: tekton.dev/v1
     - name: create-tar-archive
       taskRef:
         kind: Task
