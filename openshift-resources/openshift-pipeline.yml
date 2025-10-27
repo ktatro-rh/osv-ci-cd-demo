@@ -74,7 +74,7 @@ spec:
         - name: aapCredentialSecret
           value: aap-creds
       runAfter:
-        - s2i-nodejs
+        - create-tar-archive
       taskRef:
         kind: Task
         name: aap-launch-workflow
