@@ -62,7 +62,7 @@ spec:
         - name: files-to-tar
           value: .
       runAfter:
-        - git-clone
+        - timestamp-task
     - name: aap-launch-workflow-deploy-app
       params:
         - name: baseUrl
