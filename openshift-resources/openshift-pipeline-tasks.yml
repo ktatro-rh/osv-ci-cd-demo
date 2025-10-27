@@ -1,0 +1,81 @@
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: timestamp-task
+  namespace: demo-test
+spec:
+  results:
+    - name: current-date-unix-timestamp
+      description: The current date in unix timestamp format
+  steps:
+    - image: registry.redhat.io/ubi7/ubi-minimal
+      name: generate-timestamp
+      command:
+        - /bin/bash
+        - '-c'
+        - date +%s | tr -d '\n'| tee $(results.current-date-unix-timestamp.path)
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: aap-launch-workflow
+  namespace: demo-test
+spec:
+  params:
+    - name: baseUrl
+      type: string
+    - name: workflowId
+      type: string
+    - name: aapCredentialSecret
+      type: string
+    - name: deployment_version
+      type: string
+  steps:
+    - command:
+        - /bin/bash
+        - '-c'
+        - >-
+          curl -k -X POST --user $AAP_USER:$AAP_PASSWORD
+          $(inputs.params.baseUrl)/api/v2/workflow_job_templates/$(inputs.params.workflowId)/launch/
+          -H 'Content-Type: application/json' -d "{\"extra_vars\":
+          {\"deployment_version\":\"$(inputs.params.deployment_version)\"}}"
+      env:
+        - name: AAP_USER
+          valueFrom:
+            secretKeyRef:
+              key: user
+              name: $(inputs.params.aapCredentialSecret)
+        - name: AAP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: $(inputs.params.aapCredentialSecret)
+      image: registry.redhat.io/ubi7/ubi-minimal
+      name: launch-workflow
+---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: create-tar-archive
+spec:
+  workspaces:
+    - name: source
+      description: The workspace containing the files to be archived.
+  params:
+    - name: archive-name
+      type: string
+      description: The name of the output tar archive file.
+      default: "output.tar"
+    - name: files-to-tar
+      type: string
+      description: The files and directories to include in the tar archive.
+      default: "."
+  steps:
+    - name: tar-files
+      image: registry.redhat.io/ubi7/ubi-minimal
+      workingDir: $(workspaces.source.path)
+      script: |
+        #!/usr/bin/env sh
+        set -e
+        tar -cvf $(params.archive-name) $(params.files-to-tar)

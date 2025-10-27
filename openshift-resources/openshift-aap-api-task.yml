@@ -1,0 +1,37 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: aap-launch-workflow
+  namespace: demo-test
+spec:
+  params:
+    - name: baseUrl
+      type: string
+    - name: workflowId
+      type: string
+    - name: aapCredentialSecret
+      type: string
+    - name: imageTag
+      type: string
+  steps:
+    - command:
+        - /bin/bash
+        - '-c'
+        - >-
+          curl -k -X POST --user $AAP_USER:$AAP_PASSWORD
+          $(inputs.params.baseUrl)/api/v2/workflow_job_templates/$(inputs.params.workflowId)/launch/
+          -H 'Content-Type: application/json' -d "{\"extra_vars\":
+          {\"image_tag\":\"$(inputs.params.imageTag)\"}}"
+      env:
+        - name: AAP_USER
+          valueFrom:
+            secretKeyRef:
+              key: user
+              name: $(inputs.params.aapCredentialSecret)
+        - name: AAP_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: $(inputs.params.aapCredentialSecret)
+      image: registry.redhat.io/ubi7/ubi-minimal
+      name: launch-workflow

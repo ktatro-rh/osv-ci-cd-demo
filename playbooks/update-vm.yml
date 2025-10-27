@@ -11,8 +11,12 @@
     deployment_version: 1.0.0
 
   tasks:
-
-    - name: Apply multiple patch operations to an existing Pod
+    - name: stop the temporary VM
+      kubevirt_vm:
+        state: stopped
+        name: "{{ vm_name }}-{{ deployment_version }}"
+        namespace: "{{ vm_project }}"
+    - name: Apply multiple patch operations to an existing VM
       kubernetes.core.k8s_json_patch:
         api_version: kubevirt.io/v1
         kind: VirtualMachine
