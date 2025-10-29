@@ -41,14 +41,9 @@ spec:
         - name: userHome
           value: /home/git
       taskRef:
-        resolver: cluster
-        params:
-          - name: kind
-            value: task
-          - name: name
-            value: git-clone
-          - name: namespace
-            value: openshift-pipelines
+        kind: Task
+        name: git-clone
+        apiVersion: tekton.dev/v1
       workspaces:
         - name: output
           workspace: workspace

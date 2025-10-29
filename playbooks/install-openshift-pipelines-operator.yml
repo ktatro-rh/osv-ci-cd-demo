@@ -1,0 +1,10 @@
+---
+- hosts: localhost
+  collections:
+  - kubernetes.core
+
+  tasks:
+  - name: install openshift pipelines
+    kubernetes.core.k8s:
+      src: ../openshift-resources/openshift-pipelines-operator-rh.yml
+      state: present
