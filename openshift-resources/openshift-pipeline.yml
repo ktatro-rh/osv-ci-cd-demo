@@ -66,6 +66,9 @@ spec:
           value: .
       runAfter:
         - timestamp-task
+      workspaces:
+        - name: output
+          workspace: workspace  
     - name: aap-launch-workflow-deploy-app
       params:
         - name: baseUrl
@@ -82,5 +85,8 @@ spec:
         kind: Task
         name: aap-launch-workflow
         apiVersion: tekton.dev/v1
+      workspaces:
+        - name: output
+          workspace: workspace
   workspaces:
     - name: workspace
