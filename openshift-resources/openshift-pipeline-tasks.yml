@@ -74,7 +74,7 @@ spec:
       default: "."
   steps:
     - name: tar-files
-      image: registry.redhat.io/ubi7/ubi-minimal
+      image: registry.redhat.io/ubi8/ubi
       workingDir: $(workspaces.source.path)
       script: |
         #!/usr/bin/env sh
