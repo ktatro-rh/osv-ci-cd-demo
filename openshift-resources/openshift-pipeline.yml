@@ -67,7 +67,7 @@ spec:
       runAfter:
         - timestamp-task
       workspaces:
-        - name: output
+        - name: source
           workspace: workspace  
     - name: aap-launch-workflow-deploy-app
       params:
