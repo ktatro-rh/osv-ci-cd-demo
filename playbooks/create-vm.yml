@@ -134,13 +134,14 @@
             - cloudInitNoCloud:
                 userData: |
                   #cloud-config
-                  user: cloud-user
+                  user: redhat
                   password: {{ cloud_init_password }}
                   chpasswd: { expire: False }
+                  ssh_pwauth: true
                 write_files: |
-                  path: /home/cloud-user
+                  path: /home/redhat
                   content: {{ deployment_version }}
-                  owner: 'cloud-user:cloud-user'
+                  owner: 'redhat:redhat'
 
               name: 'cloudinitdisk'
     - name: create service
