@@ -17,7 +17,7 @@
 
     #application specifics
     deployment_name: bonjour
-    deployment_version: 1_0_0
+    deployment_version: "1_0_0"
 
   tasks:        
   - name: Retrieve Artifact
