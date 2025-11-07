@@ -138,6 +138,8 @@
                   password: {{ cloud_init_password }}
                   chpasswd: { expire: False }
                   ssh_pwauth: true
+                  ssh_authorized_keys:
+                    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKedNAUKIjxWaVPXCu6Khb3Qs22fXSP6qjTQ3ICtGvpg user@username-machinename
                 write_files: |
                   path: /home/redhat
                   content: {{ deployment_version }}
