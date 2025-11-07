@@ -13,7 +13,7 @@
     mount_path: "/mnt/pvc"
     pvc_name: bonjour-artifacts
     file_path_in_volume: artifacts
-    local_dest_path: /tmp/
+    local_dest_path: /tmp
 
     #application specifics
     deployment_name: bonjour
