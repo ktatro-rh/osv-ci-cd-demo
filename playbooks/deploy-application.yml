@@ -12,9 +12,10 @@
     helper_image: "registry.access.redhat.com/ubi8/ubi-minimal:latest"
     mount_path: "/mnt/pvc"
     pvc_name: bonjour-artifacts
+    file_path_in_volume: artifacts
 
     #application specifics
-    deployment_name: my-application
+    deployment_name: bonjour
     deployment_version: 1_0_0
 
   tasks:        
@@ -71,7 +72,7 @@
           namespace: "{{ vm_project }}"
           # We combine the mount path with the file path.
           # The regex_replace ensures we don't get double slashes (e.g., /mnt/pvc//data)
-          src: "{{ mount_path }}/{{ file_path_in_volume | regex_replace('^/', '') }}"
+          src: "{{ mount_path }}/{{ file_path_in_volume }}/{{deployment_name}}-{{deployment_version}}.tar.gz"
           dest: "{{ local_dest_path }}"
         
         # Use 'changed_when: true' to always show this task as "changed"
