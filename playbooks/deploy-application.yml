@@ -73,8 +73,8 @@
           namespace: "{{ vm_project }}"
           # We combine the mount path with the file path.
           # The regex_replace ensures we don't get double slashes (e.g., /mnt/pvc//data)
-          src: "{{ mount_path }}/{{ file_path_in_volume }}/{{deployment_name}}-{{deployment_version}}.tar.gz"
-          dest: "{{ local_dest_path }}"
+          remote_path: "{{ mount_path }}/{{ file_path_in_volume }}/{{deployment_name}}-{{deployment_version}}.tar.gz"
+          local_path: "{{ local_dest_path }}"
         
         # Use 'changed_when: true' to always show this task as "changed"
         changed_when: true
