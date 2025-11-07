@@ -46,12 +46,12 @@
               restartPolicy: Never
 
       - name: 2. Launch the helper pod
-        community.kubernetes.k8s:
+        kubernetes.core.k8s:
           state: present
           definition: "{{ helper_pod_manifest }}"
 
       - name: 3. Wait for the helper pod to be in 'Running' state
-        community.kubernetes.k8s_info:
+        kubernetes.core.k8s_info:
           kind: Pod
           name: "{{ helper_pod_name }}"
           namespace: "{{ pvc_namespace }}"
@@ -65,7 +65,7 @@
         failed_when: pod_info.resources[0].status.phase != 'Running'
 
       - name: 4. Copy the file from the pod to the local machine
-        community.kubernetes.k8s_cp:
+        kubernetes.core.k8s_cp:
           state: from_pod
           pod: "{{ helper_pod_name }}"
           namespace: "{{ pvc_namespace }}"
@@ -83,7 +83,7 @@
     # It runs whether the 'block' succeeded or failed.
     always:
       - name: 5. (Cleanup) Delete the helper pod
-        community.kubernetes.k8s:
+        kubernetes.core.k8s:
           state: absent
           definition: "{{ helper_pod_manifest }}"
         # We don't want this task to fail if the pod was never created
