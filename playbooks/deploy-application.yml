@@ -68,7 +68,7 @@
         kubernetes.core.k8s_cp:
           state: from_pod
           pod: "{{ helper_pod_name }}"
-          namespace: "{{ pvc_namespace }}"
+          namespace: "{{ vm_project }}"
           # We combine the mount path with the file path.
           # The regex_replace ensures we don't get double slashes (e.g., /mnt/pvc//data)
           src: "{{ mount_path }}/{{ file_path_in_volume | regex_replace('^/', '') }}"
