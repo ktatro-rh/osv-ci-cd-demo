@@ -54,7 +54,7 @@
         kubernetes.core.k8s_info:
           kind: Pod
           name: "{{ helper_pod_name }}"
-          namespace: "{{ pvc_namespace }}"
+          namespace: "{{ vm_project }}"
           wait: yes
           wait_condition:
             type: Ready
