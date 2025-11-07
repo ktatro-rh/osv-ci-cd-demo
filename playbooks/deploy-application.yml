@@ -86,7 +86,7 @@
     always:
       - name: 5. (Cleanup) Delete the helper pod
         kubernetes.core.k8s:
-          state: absent
+          state: present
           definition: "{{ helper_pod_manifest }}"
         # We don't want this task to fail if the pod was never created
         ignore_errors: true
