@@ -8,7 +8,7 @@
     # VM details
     vm_name: test-vm
     vm_project: demo-test
-    helper_pod_name: "pvc-file-retriever-{{ 6 | random_int(start=100000) }}"
+    helper_pod_name: "pvc-file-retriever"
     helper_image: "registry.access.redhat.com/ubi8/ubi-minimal:latest"
     mount_path: "/mnt/pvc"
     pvc_name: bonjour-artifacts
