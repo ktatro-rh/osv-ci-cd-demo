@@ -78,15 +78,13 @@
         
         # Use 'changed_when: true' to always show this task as "changed"
         changed_when: true
-        notify:
-          - file_copied_success
 
     # This 'always' block is critical for cleanup.
     # It runs whether the 'block' succeeded or failed.
     always:
       - name: 5. (Cleanup) Delete the helper pod
         kubernetes.core.k8s:
-          state: present
+          state: absent
           definition: "{{ helper_pod_manifest }}"
         # We don't want this task to fail if the pod was never created
         ignore_errors: true
