@@ -97,7 +97,7 @@
   - name: "Copy file to VM using 'virtctl scp'"
       # We use 'ansible.builtin.command' to build the exact
       # virtctl command string.
-    ansible.builtin.debug: virtctl guestosinfo test-vm -n demo-test
+    ansible.builtin.debug:
     var: virtctl_debug_output
     changed_when: false # A file copy is always considered a change
 
