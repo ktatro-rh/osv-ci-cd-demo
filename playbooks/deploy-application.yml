@@ -87,6 +87,20 @@
         # We don't want this task to fail if the pod was never created
         ignore_errors: true
 
+  - name: "debug 'virtctl scp'"
+      # We use 'ansible.builtin.command' to build the exact
+      # virtctl command string.
+    ansible.builtin.command: virtctl guestosinfo test-vm -n demo-test
+    register: virtctl_debug_output
+    changed_when: true # A file copy is always considered a change
+
+  - name: "Copy file to VM using 'virtctl scp'"
+      # We use 'ansible.builtin.command' to build the exact
+      # virtctl command string.
+    ansible.builtin.debug: virtctl guestosinfo test-vm -n demo-test
+    var: virtctl_debug_output
+    changed_when: false # A file copy is always considered a change
+
   - name: "Copy file to VM using 'virtctl scp'"
       # We use 'ansible.builtin.command' to build the exact
       # virtctl command string.
