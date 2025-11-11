@@ -10,7 +10,7 @@ images:
 # This section adds custom commands to the build process
 additional_build_steps:
   prepend_final:
-    # These commands will download the latest virtctl binary,
+    # These commands will download the latest virtctl binary, v1.6.3
     # place it in /usr/bin, and make it executable.
-    - RUN curl -Lo /usr/bin/virtctl https://github.com/kubevirt/kubevirt/releases/latest/download/virtctl-stable-linux-amd64
+    - RUN curl -Lo /usr/bin/virtctl https://github.com/kubevirt/kubevirt/releases/download/v1.6.3/virtctl-v1.6.3-linux-amd64
     - RUN chmod +x /usr/bin/virtctl

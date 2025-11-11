@@ -67,7 +67,6 @@
         failed_when: pod_info.resources[0].status.phase != 'Running'
 
       - name: 4. Copy the file from the pod to the local machine
-        delegate_to: localhost
         kubernetes.core.k8s_cp:
           state: from_pod
           pod: "{{ helper_pod_name }}"
@@ -92,10 +91,9 @@
       # We use 'ansible.builtin.command' to build the exact
       # virtctl command string.
     ansible.builtin.command: >
-      /usr/bin/virtctl scp
+      virtctl scp
       -n {{ vm_project }}
       {{ local_dest_path }}/{{ deployment_name }}-{{deployment_version}}.tar.gz
       redhat@{{ vm_name }}:/tmp/
     register: virtctl_output
-    delegate_to: localhost
     changed_when: true # A file copy is always considered a change
