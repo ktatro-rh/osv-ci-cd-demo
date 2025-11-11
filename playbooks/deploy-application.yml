@@ -92,7 +92,7 @@
       # We use 'ansible.builtin.command' to build the exact
       # virtctl command string.
     ansible.builtin.command: >
-      virtctl scp
+      /usr/bin/virtctl scp
       -n {{ vm_project }}
       {{ local_dest_path }}/{{ deployment_name }}-{{deployment_version}}.tar.gz
       redhat@{{ vm_name }}:/tmp/
