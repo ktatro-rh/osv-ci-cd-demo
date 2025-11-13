@@ -1,0 +1,91 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: bonjour-tar-to-pvc
+  namespace: demo-test
+spec:
+  params:
+    - name: repo_url
+      type: string
+    - default: master
+      name: revision
+      type: string
+    - default: bonjour.tar.gz
+      name: tar_name
+      type: string
+    - default: artifacts
+      name: pvc_subdir
+      type: string
+  tasks:
+    - name: clone-tar-copy
+      params:
+        - name: repo_url
+          value: $(params.repo_url)
+        - name: revision
+          value: $(params.revision)
+        - name: tar_name
+          value: $(params.tar_name)
+        - name: pvc_subdir
+          value: $(params.pvc_subdir)
+      taskSpec:
+        metadata: {}
+        params:
+          - name: repo_url
+            type: string
+          - name: revision
+            type: string
+          - name: tar_name
+            type: string
+          - name: pvc_subdir
+            type: string
+        spec: null
+        steps:
+          - computeResources: {}
+            image: 'docker.io/alpine/git:2.45.2'
+            name: clone
+            script: |
+              set -eu
+              echo "[clone] PWD=$(pwd)"
+              git clone "$(params.repo_url)" repo
+              cd repo
+              git checkout "$(params.revision)"
+              echo "[clone] done"
+            workingDir: $(workspaces.scratch.path)
+          - computeResources: {}
+            image: 'alpine:3.20'
+            name: make-tar
+            script: |
+              set -euo pipefail
+              OUT="$(workspaces.scratch.path)/repo/$(params.tar_name)"
+              echo "[tar] PWD=$(pwd)"
+              echo "[tar] creating $OUT (excluding .git)"
+              tar -czf "$OUT" --exclude .git .
+              echo "[tar] created:"
+              ls -lh "$OUT"
+            workingDir: $(workspaces.scratch.path)/repo
+          - computeResources: {}
+            image: registry.access.redhat.com/ubi9/ubi
+            name: copy-to-pvc
+            script: |
+              set -euo pipefail
+              SRC="$(workspaces.scratch.path)/repo/$(params.tar_name)"
+              DST_DIR="$(workspaces.outpvc.path)/$(params.pvc_subdir)"
+              echo "[copy] SRC=$SRC"
+              echo "[copy] DST_DIR=$DST_DIR"
+              mkdir -p "$DST_DIR"
+              cp "$SRC" "$DST_DIR/"
+              echo "[copy] done:"
+              ls -lh "$DST_DIR/$(params.tar_name)"
+              chmod 755 "$DST_DIR/$(params.tar_name)"
+            workingDir: $(workspaces.scratch.path)/repo
+        workspaces:
+          - name: scratch
+          - name: outpvc
+      workspaces:
+        - name: scratch
+          workspace: scratch
+        - name: outpvc
+          workspace: outpvc
+  workspaces:
+    - name: scratch
+    - name: outpvc
