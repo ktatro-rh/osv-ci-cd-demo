@@ -151,6 +151,7 @@
                   packages: 
                     - nodejs
                   runcmd:
+                    - cd /tmp
                     - wget "{{ artifact_base_url }}/artifacts/{{ deployment_name }}-{{ deployment_version }}.tar.gz"
                     - mkdir /opt/{{ deployment_name }}
                     - tar -xzf {{ deployment_name }}-{{ deployment_version }}.tar.gz -C /opt/{{ deployment_name }}

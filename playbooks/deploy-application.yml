@@ -87,7 +87,7 @@
         # We don't want this task to fail if the pod was never created
         ignore_errors: true
 
-  - name: "debug 'virtctl command'"
+  - name: "debug virtctl command"
       # We use 'ansible.builtin.command' to build the exact
       # virtctl command string.
     ansible.builtin.command: virtctl guestosinfo test-vm -n demo-test
