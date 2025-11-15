@@ -151,7 +151,7 @@
                       permissions: 0644
                       content: |
                         [Unit]
-                        Description=My Node.js Application
+                        Description=Node.js {{ deployment_name }} Application
                         After=network.target
                         [Service]
                         ExecStart=/usr/bin/node /opt/{{ deployment_name }}/{{ deployment_name }}.js
