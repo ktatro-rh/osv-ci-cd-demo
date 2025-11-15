@@ -168,7 +168,7 @@
                     - tar -xzf {{ deployment_name }}-{{ deployment_version }}.tar.gz -C /opt/{{ deployment_name }}
                     - npm install express
                     - systemctl daemon-reload
-                    - systemctl enable {{ deployment_name }}.service
+                    - systemctl enable {{ deployment_name }}.service --now
               name: 'cloudinitdisk'
     - name: create service
       kubernetes.core.k8s:
