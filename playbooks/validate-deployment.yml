@@ -5,7 +5,7 @@
   gather_facts: false
 
   vars:
-     base_url: apps.cluster-46f6g.dynamic.redhatworkshops.io/
+     base_url: apps.cluster-46f6g.dynamic.redhatworkshops.io
      endpoint: /api/bonjour
      route_name: test-vm-route
      vm_project: demo-test
