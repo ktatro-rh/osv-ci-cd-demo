@@ -5,7 +5,7 @@ metadata:
   namespace: "{{ vm_project }}"
 spec:
   selector:
-    app: "{{ deployment_name }}"
+    app: "{{ vm_name }}"
   ports:
     - protocol: TCP
       port: 80

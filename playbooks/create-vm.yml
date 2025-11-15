@@ -144,17 +144,15 @@
                   chpasswd: { expire: False }
                   ssh_pwauth: true
                   ssh_authorized_keys: {{ ssh_public_key }}
-                  write_files:
-                    - path: /home/redhat
-                      content: {{ deployment_version }}
-                      owner: 'redhat:redhat'
                   packages: 
                     - nodejs
                   runcmd:
                     - cd /tmp
-                    - wget "{{ artifact_base_url }}/artifacts/{{ deployment_name }}-{{ deployment_version }}.tar.gz"
+                    - curl "{{ artifact_base_url }}/artifacts/{{ deployment_name }}-{{ deployment_version }}.tar.gz > {{ deployment_name }}-{{ deployment_version }}.tar.gz" 
                     - mkdir /opt/{{ deployment_name }}
                     - tar -xzf {{ deployment_name }}-{{ deployment_version }}.tar.gz -C /opt/{{ deployment_name }}
+                    - cd /opt/bonjour
+                    - npm install express
               name: 'cloudinitdisk'
     - name: create service
       kubernetes.core.k8s:
