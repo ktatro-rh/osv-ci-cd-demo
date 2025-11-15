@@ -1,0 +1,55 @@
+---
+- name: Create a VM on OpenShift Virtualization
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    desired_state: present
+
+  tasks:        
+    - name: 1. Create the helper pod definition
+      set_fact:
+        helper_pod_manifest:
+          apiVersion: v1
+          kind: Pod
+          metadata:
+            name: artifact-repo
+            namespace: "demo-test"
+            labels:
+              app: artifact-repo
+          spec:
+            containers:
+              - name: helper-container
+                image: 'image-registry.openshift-image-registry.svc:5000/openshift/httpd:latest'
+                # Pod needs to stay alive while we copy
+                command: [ "sleep", "3600" ]
+                volumeMounts:
+                  - name: target-volume
+                    mountPath: /var/www/html
+            volumes:
+              - name: target-volume
+                persistentVolumeClaim:
+                  claimName: bonjour-artifacts
+            # Ensure the pod doesn't try to restart on failure
+            restartPolicy: Never
+
+    - name: 2. Launch the helper pod
+      kubernetes.core.k8s:
+        state: "{{ desired_state }}"
+        definition: "{{ helper_pod_manifest }}"
+
+    - name: 3. Wait for the helper pod to be in 'Running' state
+      when: desired_state == 'present'
+      kubernetes.core.k8s_info:
+        kind: Pod
+        name: "artifact-repo"
+        namespace: "demo-test"
+        wait: yes
+        wait_condition:
+          type: Ready
+          status: "True"
+        wait_timeout: 300 # 5 minute timeout
+      register: pod_info
+      # This assertion is for safety
+      failed_when: pod_info.resources[0].status.phase != 'Running'
