@@ -1,0 +1,18 @@
+---
+- name: Validate Application Deployed Properly
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+     base_url: apps.cluster-46f6g.dynamic.redhatworkshops.io/
+     endpoint: /api/bonjour
+     route_name: test-vm-route
+  tasks:
+    - name: Make a GET request to an API
+      ansible.builtin.uri:
+        url: "{{route_name}}-{{vm_project}}.{{base_url}}{{endpoint}}"
+      retries: 12
+      delay: 5
+      register: api_response 
+      until: api_response.status == 200
