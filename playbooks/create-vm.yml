@@ -97,7 +97,7 @@
         data_volume_templates:
           - kind: 'DataVolume'
             metadata:
-              name: "{{ vm_name }}-{{deployment_version}}"
+              name: "{{ vm_name }}-{{deployment_version | regex_replace('_','-')}}"
             spec:
               sourceRef:
                 kind: 'DataSource'
@@ -134,7 +134,7 @@
           terminationGracePeriodSeconds: 180
           volumes:
             - dataVolume:
-                name: "{{ vm_name }}-{{deployment_version}}"
+                name: "{{ vm_name }}-{{deployment_version | regex_replace('_','-')}}"
               name: 'rootdisk'
             - cloudInitNoCloud:
                 userData: |
