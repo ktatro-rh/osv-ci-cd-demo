@@ -1,0 +1,12 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: "artifact-repo"
+  namespace: "demo-test"
+spec:
+  to:
+    kind: Service
+    name: "artifact-repo"
+  tls: null
+  port:
+    targetPort: 8080

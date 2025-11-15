@@ -34,7 +34,12 @@
 
     #application specifics
     deployment_name: my-application
-    deployment_version: 1.0.0
+    deployment_version: "1_0_0"
+
+    #application specifics
+    artifact_base_url: http://artifact-repo-demo-test.apps.cluster-46f6g.dynamic.redhatworkshops.io/
+    
+
 
   tasks:
     - name: get vm
@@ -143,6 +148,12 @@
                   path: /home/redhat
                   content: {{ deployment_version }}
                   owner: 'redhat:redhat'
+                packages: nodejs
+                runcmd: |
+                  - wget "{{ artifact_base_url }}/artifacts/{{ deployment_name }}-{{ deployment_version }}.tar.gz"
+                  - mkdir /opt/{{ deployment_name }}
+                  - tar -xzf {{ deployment_name }}-{{ deployment_version }}.tar.gz -C /opt/{{ deployment_name }}
+
 
               name: 'cloudinitdisk'
     - name: create service
