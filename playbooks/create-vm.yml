@@ -148,7 +148,7 @@
                     - nodejs
                   write_files:
                     - path: /etc/systemd/system/{{ deployment_name }}.service
-                      permissions:'0644'
+                      permissions: 0644
                       content: |
                         [Unit]
                         Description=My Node.js Application
