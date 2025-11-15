@@ -146,12 +146,28 @@
                   ssh_authorized_keys: {{ ssh_public_key }}
                   packages: 
                     - nodejs
+                  write_files:
+                    - path: /etc/systemd/system/{{ deployment_name }}.service
+                      content: |
+                        [Unit]
+                        Description=My Node.js Application
+                        After=network.target
+                        [Service]
+                        ExecStart=/usr/bin/node /opt/{{ deployment_name }}/{{ deployment_name }}.js
+                        WorkingDirectory=/opt/{{ deployment_name }}
+                        Restart=always
+                        User=redhat
+                        Environment=NODE_ENV=production
+                        [Install]
+                        WantedBy=multi-user.target
                   runcmd:
                     - mkdir /opt/{{ deployment_name }}
                     - cd /opt/{{ deployment_name }}
                     - curl {{ artifact_base_url }}/artifacts/{{ deployment_name }}-{{ deployment_version }}.tar.gz > {{ deployment_name }}-{{ deployment_version }}.tar.gz
                     - tar -xzf {{ deployment_name }}-{{ deployment_version }}.tar.gz -C /opt/{{ deployment_name }}
                     - npm install express
+                    - systemctl daemon-reload
+                    - systemctl enable {{ deployment_name }}.service
               name: 'cloudinitdisk'
     - name: create service
       kubernetes.core.k8s:
