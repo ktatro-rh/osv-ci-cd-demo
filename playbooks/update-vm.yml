@@ -4,21 +4,11 @@
   connection: local
   gather_facts: false
 
-  vars:
-    # VM details
-    vm_name: "{{ workflow_job_template_data.vm_name | default('vmtest') }}" 
-    vm_project: "{{ workflow_job_template_data.vm_project | default('demo_test') }}" 
-    is_new: "{{ workflow_job_template_data.is_new | default('true') }}" 
-
   tasks:
-    
-    - name: debug template data
-      debug:
-        var: workflow_job_template_data 
-    
+     
     - name: debug facts
       debug:
-        var: ansible_facts
+        var: is_new
     
     - name: stop the temporary VM
       when: is_new == false

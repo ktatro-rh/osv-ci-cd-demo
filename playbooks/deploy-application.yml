@@ -28,22 +28,23 @@
             apiVersion: v1
             kind: Pod
             metadata:
-              name: "{{ helper_pod_name }}"
+              name: artifact-repo
               namespace: "{{ vm_project }}"
+              labels:
+                app: artifact-repo
             spec:
               containers:
                 - name: helper-container
-                  image: "{{ helper_image }}"
+                  image: 'image-registry.openshift-image-registry.svc:5000/openshift/httpd:latest'
                   # Pod needs to stay alive while we copy
                   command: [ "sleep", "3600" ]
                   volumeMounts:
                     - name: target-volume
-                      mountPath: "{{ mount_path }}"
-                      readOnly: true
+                      mountPath: /var/www/html
               volumes:
                 - name: target-volume
                   persistentVolumeClaim:
-                    claimName: "{{ pvc_name }}"
+                    claimName: bonjour-artifacts
               # Ensure the pod doesn't try to restart on failure
               restartPolicy: Never
 
