@@ -13,7 +13,7 @@
     - name: Make a GET request to an API
       ansible.builtin.uri:
         url: "http://{{route_name}}-{{vm_project}}.{{base_url}}{{endpoint}}"
-      retries: 12
+      retries: 24
       delay: 5
       register: api_response 
       until: api_response.status == 200
