@@ -11,7 +11,7 @@
         state: patched
         kind: Service
         namespace: "{{ vm_project }}"
-        name: "{{ vm_base_name }}-service"
+        name: "{{ vm_name }}-service"
         definition:
           spec:
             selector:

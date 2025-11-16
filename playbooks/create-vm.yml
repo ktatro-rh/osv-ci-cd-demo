@@ -6,7 +6,6 @@
 
   vars:
     # VM details
-    vm_base_name: test-vm
     vm_name: test-vm
     vm_project: default
     storage_size: 30Gi
@@ -40,15 +39,13 @@
     #application specifics
     artifact_base_url: http://artifact-repo-demo-test.apps.cluster-46f6g.dynamic.redhatworkshops.io/
     
-
-
   tasks:
     - name: get vm
       kubernetes.core.k8s_info:
         api_version: kubevirt.io/v1
         kind: VirtualMachine
         label_selectors:
-          - "vm = {{ vm_base_name }}"
+          - "vm = {{ vm_name }}"
         namespace: "{{ vm_project }}"
       register: vm
 
@@ -84,7 +81,6 @@
           route_name: "{{ route_name }}"
           vm_project: "{{ vm_project }}"
           existing_vm: "{{ existing_vm }}"
-          vm_base_name: "{{ vm_base_name }}"
 
     - name: Create virtual machine
       redhat.openshift_virtualization.kubevirt_vm:
