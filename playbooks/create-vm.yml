@@ -97,7 +97,7 @@
 
         labels:
           app: "{{ vm_name_set }}"
-          vm: "{{ vm_base_name }}"
+          vm: "{{ vm_name }}"
           kubevirt.io/dynamic-credentials-support: 'true'
           vm.kubevirt.io/template: "{{ os_images_template }}-{{ os_images_workload }}-{{ os_images_flavor }}"
           vm.kubevirt.io/template.namespace: "{{ os_images_template_namespace }}"
