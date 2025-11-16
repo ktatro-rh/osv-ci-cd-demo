@@ -6,10 +6,10 @@
 
   tasks:
       
-    - name: stop the temporary VM
+    - name: remove the temporary VM
       when: is_new == false
       redhat.openshift_virtualization.kubevirt_vm:
-        state: stopped
+        state: absent
         name: "{{ vm_name_temporary }}"
         namespace: "{{ vm_project }}"
     
