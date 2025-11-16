@@ -68,6 +68,7 @@
         vm_name_set: "{{vm_name}}-{{ deployment_version }}"
         service_name: "{{ vm_name }}-{{ deployment_version }}-service"
         route_name: "{{ vm_name }}-{{ deployment_version }}-route"
+        existing_vm: vm.resources[0].metadata.name
         is_new: false
 
     - name: set workflow data
@@ -79,6 +80,7 @@
           vm_name_temporary: "{{ vm_name_set }}"
           route_name: "{{ route_name }}"
           vm_project: "{{ vm_project }}"
+          existing_vm: "{{ existing_vm }}"
 
     - name: Create virtual machine
       redhat.openshift_virtualization.kubevirt_vm:

@@ -5,31 +5,25 @@
   gather_facts: false
 
   tasks:
-
-    - name: stop the temporary VM
+ 
+    - name: set label on new vm
       when: is_new == false
-      redhat.openshift_virtualization.kubevirt_vm:
-        running: false
-        name: "{{ vm_name_temporary }}"
-        namespace: "{{ vm_project }}"
-    
-
-    - name: Apply multiple patch operations to an existing VM
-      when: is_new == false
-      kubernetes.core.k8s_json_patch:
-        api_version: kubevirt.io/v1
+      kubernetes.core.k8s:
+        state: patched
         kind: VirtualMachine
         namespace: "{{ vm_project }}"
-        name: "{{ vm_name }}"
-        patch:
-        - op: replace
-          path: /spec/dataVolumeTemplates/0/metadata/name
-          value: "{{ vm_name }}-{{ deployment_version }}"
-        - op: replace
-          path: /spec/template/spec/volumes/0/dataVolume/name
-          value: "{{ vm_name }}-{{ deployment_version }}"
+        name: "{{ vm_name_temporary }}"
+        definition:
+          metadata:
+            lables:
+              app: "{{ vm_name }}"
 
-
+    - name: remove the old VM
+      when: is_new == false
+      redhat.openshift_virtualization.kubevirt_vm:
+        state: absent
+        name: "{{ existing_vm }}"
+        namespace: "{{ vm_project }}"
 
     - name: set workflow data
       ansible.builtin.set_stats:
