@@ -28,6 +28,8 @@
       when: is_new == false
       kubernetes.core.k8s:
         state: absent
+        kind: Service
+        api_version: v1
         name: "{{ vm_name_temporary }}-service"
         namespace: "{{ vm_project }}"
 
@@ -35,6 +37,8 @@
       when: is_new == false
       kubernetes.core.k8s:
         state: absent
+        kind: Route
+        api_version: route.openshift.io/v1
         name: "{{ vm_name_temporary }}-route"
         namespace: "{{ vm_project }}"
 
