@@ -84,6 +84,7 @@
           route_name: "{{ route_name }}"
           vm_project: "{{ vm_project }}"
           existing_vm: "{{ existing_vm }}"
+          vm_base_name: "{{ vm_base_name }}"
 
     - name: Create virtual machine
       redhat.openshift_virtualization.kubevirt_vm:
