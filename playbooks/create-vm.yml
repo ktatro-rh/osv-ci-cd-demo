@@ -76,6 +76,7 @@
           is_new: "{{ is_new }}"
           deployment_version: "{{ deployment_version }}"
           vm_name: "{{ vm_name }}"
+          vm_name_temporary: "{{ vm_name_set }}"
           route_name: "{{ route_name }}"
           vm_project: "{{ vm_project }}"
 
