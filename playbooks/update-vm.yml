@@ -17,7 +17,8 @@
         definition:
           metadata:
             lables:
-              app: "{{ vm_name }}"
+              app: "{{ vm_base_name }}"
+              debuglabel: "true"
 
     - name: remove the old VM
       when: is_new == false
