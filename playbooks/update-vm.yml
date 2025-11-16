@@ -1,30 +1,41 @@
 ---
 - name: Update the VM
   hosts: localhost
-  connection: local
   gather_facts: false
 
   tasks:
  
-    - name: set label on new vm launcher pod
+    - name: update service for new pod label
       when: is_new == false
       kubernetes.core.k8s:
         state: patched
-        kind: Pod
+        kind: Service
         namespace: "{{ vm_project }}"
-        label_selectors:
-          - "vm = {{ vm_base_name }}"
+        name: "{{ vm_base_name }}-service"
         definition:
-          metadata:
-            lables:
-              app: "{{ vm_base_name }}"
-              debuglabel: "true"
+          spec:
+            selector:
+              app: "{{ vm_name_temporary }}"
 
     - name: remove the old VM
       when: is_new == false
       redhat.openshift_virtualization.kubevirt_vm:
         state: absent
         name: "{{ existing_vm }}"
+        namespace: "{{ vm_project }}"
+    
+    - name: remove the temporay service
+      when: is_new == false
+      kubernetes.core.k8s:
+        state: absent
+        name: "{{ vm_name_temporary }}-service"
+        namespace: "{{ vm_project }}"
+
+    - name: remove the temporay route
+      when: is_new == false
+      kubernetes.core.k8s:
+        state: absent
+        name: "{{ vm_name_temporary }}-route"
         namespace: "{{ vm_project }}"
 
     - name: set workflow data
