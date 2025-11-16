@@ -69,7 +69,7 @@
         vm_name_set: "{{vm_name}}-{{ deployment_version }}"
         service_name: "{{ vm_name }}-{{ deployment_version }}-service"
         route_name: "{{ vm_name }}-{{ deployment_version }}-route"
-        existing_vm: vm.resources[0].metadata.name
+        existing_vm: "{{ vm.resources[0].metadata.name }}"
         is_new: false
 
     - name: set workflow data
