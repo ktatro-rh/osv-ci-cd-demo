@@ -6,6 +6,7 @@
 
   vars:
     # VM details
+    vm_base_name: test-vm
     vm_name: test-vm
     vm_project: default
     storage_size: 30Gi
@@ -46,7 +47,8 @@
       kubernetes.core.k8s_info:
         api_version: kubevirt.io/v1
         kind: VirtualMachine
-        name: "{{ vm_name }}"
+        label_selectors:
+          - "vm = {{ vm_base_name }}"
         namespace: "{{ vm_project }}"
       register: vm
 
@@ -98,6 +100,7 @@
 
         labels:
           app: "{{ vm_name_set }}"
+          vm: "{{ vm_base_name }}"
           kubevirt.io/dynamic-credentials-support: 'true'
           vm.kubevirt.io/template: "{{ os_images_template }}-{{ os_images_workload }}-{{ os_images_flavor }}"
           vm.kubevirt.io/template.namespace: "{{ os_images_template_namespace }}"
