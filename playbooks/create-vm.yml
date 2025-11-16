@@ -61,6 +61,7 @@
         service_name: "{{ vm_name }}-service"
         route_name: "{{ vm_name }}-route"
         is_new: true
+        existing_vm: null
     
     - name: Set a variable
       when: vm.resources | length > 0
