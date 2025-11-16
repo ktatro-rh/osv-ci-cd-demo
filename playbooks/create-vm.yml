@@ -70,12 +70,14 @@
         route_name: "{{ vm_name }}-{{ deployment_version }}-route"
         is_new: false
 
-    - name: set workflow data_volume_templates
+    - name: set workflow data
       ansible.builtin.set_stats:
         data:
           is_new: "{{ is_new }}"
           deployment_version: "{{ deployment_version }}"
           vm_name: "{{ vm_name }}"
+          route_name: "{{ route_name }}"
+          vm_project: "{{ vm_project }}"
 
     - name: Create virtual machine
       redhat.openshift_virtualization.kubevirt_vm:
