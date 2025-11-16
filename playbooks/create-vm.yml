@@ -69,7 +69,13 @@
         service_name: "{{ vm_name }}-{{ deployment_version }}-service"
         route_name: "{{ vm_name }}-{{ deployment_version }}-route"
         is_new: false
-        
+
+    - name: set workflow data_volume_templates
+      ansible.builtin.set_stats:
+        data:
+          is_new: "{{ is_new }}"
+          deployment_version: "{{ deployment_version }}"
+          vm_name: "{{ vm_name }}"
 
     - name: Create virtual machine
       redhat.openshift_virtualization.kubevirt_vm:
@@ -97,7 +103,7 @@
         data_volume_templates:
           - kind: 'DataVolume'
             metadata:
-              name: "{{ vm_name }}-{{deployment_version | regex_replace('_','-')}}"
+              name: "{{ vm_name }}-{{deployment_version}}"
             spec:
               sourceRef:
                 kind: 'DataSource'
@@ -134,7 +140,7 @@
           terminationGracePeriodSeconds: 180
           volumes:
             - dataVolume:
-                name: "{{ vm_name }}-{{deployment_version | regex_replace('_','-')}}"
+                name: "{{ vm_name }}-{{deployment_version}}"
               name: 'rootdisk'
             - cloudInitNoCloud:
                 userData: |-

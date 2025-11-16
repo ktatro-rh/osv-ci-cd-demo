@@ -6,17 +6,19 @@
 
   vars:
     # VM details
-    vm_name: test-vm
-    vm_project: default
-    deployment_version: 1.0.0
+    vm_name: "{{ workflow_job_template_data.vm_name | default('vmtest') }}" 
+    vm_project: "{{ workflow_job_template_data.vm_project | default('demo_test') }}" 
+    is_new: "{{ workflow_job_template_data.is_new | default('true') }}" 
 
   tasks:
     - name: stop the temporary VM
+      when: is_new == false
       kubevirt_vm:
         state: stopped
         name: "{{ vm_name }}-{{ deployment_version }}"
         namespace: "{{ vm_project }}"
     - name: Apply multiple patch operations to an existing VM
+      when: is_new == false
       kubernetes.core.k8s_json_patch:
         api_version: kubevirt.io/v1
         kind: VirtualMachine
