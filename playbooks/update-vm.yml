@@ -13,10 +13,11 @@
   tasks:
     - name: stop the temporary VM
       when: is_new == false
-      kubevirt_vm:
+      redhat.openshift_virtualization.kubevirt_vm:
         state: stopped
         name: "{{ vm_name }}-{{ deployment_version }}"
         namespace: "{{ vm_project }}"
+    
     - name: Apply multiple patch operations to an existing VM
       when: is_new == false
       kubernetes.core.k8s_json_patch:
