@@ -22,8 +22,9 @@
             containers:
               - name: helper-container
                 image: 'image-registry.openshift-image-registry.svc:5000/openshift/httpd:latest'
-                # Pod needs to stay alive while we copy
-                command: [ "sleep", "3600" ]
+                ports:
+                  - containerPort: 8080
+                    protocol: TCP
                 volumeMounts:
                   - name: target-volume
                     mountPath: /var/www/html
