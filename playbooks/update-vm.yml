@@ -5,16 +5,12 @@
   gather_facts: false
 
   tasks:
-     
-    - name: debug facts
-      debug:
-        var: is_new
-    
+      
     - name: stop the temporary VM
       when: is_new == false
       redhat.openshift_virtualization.kubevirt_vm:
         state: stopped
-        name: "{{ vm_name }}-{{ deployment_version }}"
+        name: "{{ vm_name_temporary }}"
         namespace: "{{ vm_project }}"
     
     - name: Apply multiple patch operations to an existing VM
@@ -31,3 +27,8 @@
         - op: replace
           path: /spec/template/spec/volumes/0/dataVolume/name
           value: "{{ vm_name }}-{{ deployment_version }}"
+
+    - name: set workflow data
+      ansible.builtin.set_stats:
+        data:
+          route_name: "{{ vm_name }}-route"
