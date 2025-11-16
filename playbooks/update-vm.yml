@@ -11,6 +11,15 @@
     is_new: "{{ workflow_job_template_data.is_new | default('true') }}" 
 
   tasks:
+    
+    - name: debug template data
+      debug:
+        var: workflow_job_template_data 
+    
+    - name: debug facts
+      debug:
+        var: ansible_facts
+    
     - name: stop the temporary VM
       when: is_new == false
       redhat.openshift_virtualization.kubevirt_vm:
