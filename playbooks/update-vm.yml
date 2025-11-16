@@ -5,7 +5,15 @@
   gather_facts: false
 
   tasks:
-      
+
+    - name: stop the temporary VM
+      when: is_new == false
+      redhat.openshift_virtualization.kubevirt_vm:
+        running: false
+        name: "{{ vm_name_temporary }}"
+        namespace: "{{ vm_project }}"
+    
+
     - name: Apply multiple patch operations to an existing VM
       when: is_new == false
       kubernetes.core.k8s_json_patch:
@@ -21,13 +29,7 @@
           path: /spec/template/spec/volumes/0/dataVolume/name
           value: "{{ vm_name }}-{{ deployment_version }}"
 
-    - name: remove the temporary VM
-      when: is_new == false
-      redhat.openshift_virtualization.kubevirt_vm:
-        state: absent
-        name: "{{ vm_name_temporary }}"
-        namespace: "{{ vm_project }}"
-    
+
 
     - name: set workflow data
       ansible.builtin.set_stats:
