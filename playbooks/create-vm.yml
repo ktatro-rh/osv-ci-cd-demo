@@ -94,7 +94,7 @@
           vm.kubevirt.io/workload: "{{ os_images_workload }}"
 
         labels:
-          app: "{{ vm_name }}"
+          app: "{{ vm_name_set }}"
           kubevirt.io/dynamic-credentials-support: 'true'
           vm.kubevirt.io/template: "{{ os_images_template }}-{{ os_images_workload }}-{{ os_images_flavor }}"
           vm.kubevirt.io/template.namespace: "{{ os_images_template_namespace }}"
@@ -106,7 +106,7 @@
         data_volume_templates:
           - kind: 'DataVolume'
             metadata:
-              name: "{{ vm_name }}-{{deployment_version}}"
+              name: "{{ vm_name_set }}"
             spec:
               sourceRef:
                 kind: 'DataSource'
@@ -143,7 +143,7 @@
           terminationGracePeriodSeconds: 180
           volumes:
             - dataVolume:
-                name: "{{ vm_name }}-{{deployment_version}}"
+                name: "{{ vm_name_set }}"
               name: 'rootdisk'
             - cloudInitNoCloud:
                 userData: |-
