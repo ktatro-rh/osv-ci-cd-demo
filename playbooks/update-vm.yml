@@ -6,13 +6,14 @@
 
   tasks:
  
-    - name: set label on new vm
+    - name: set label on new vm launcher pod
       when: is_new == false
       kubernetes.core.k8s:
         state: patched
-        kind: VirtualMachine
+        kind: Pod
         namespace: "{{ vm_project }}"
-        name: "{{ vm_name_temporary }}"
+        label_selectors:
+          - "vm = {{ vm_base_name }}"
         definition:
           metadata:
             lables:
