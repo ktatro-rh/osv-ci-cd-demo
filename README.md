@@ -2,40 +2,32 @@
 
 # team-eco-sa-virtualization-cicd
 
-# Ansible CI/CD Demo
+# OpenShift Virtualization Ansible + OpenShift Pipelines CI/CD Demo
 
-These are the steps for setting up the AAP CI/CD Demo on a fresh OpenShift 4.x install.
+These are the steps for setting up the AAP CI/CD Demo on from the Day 2 Operations RHDP Deployment.
 
-1. Install AAP Operator
-2. Install Openshift Pipelines Operator
-3. Create AutomationController instance named automationcontroller
-4. Follow route (aap namespace -> routes) to newly created automation controller instance
-5. Login AAP as admin using credentials in secret automationcontroller-admin-password in namespace aap
-6. Subscribe AAP Instance
-7. Create ansible-sa service account in aap namespace (oc apply -f ./openshift-resources/openshift-ansible-sa.yaml) (note this gives the cluster admin privileges, if doing this in a non-testing environment, you'll want to limit the scope of this users access)
-8. In AAP, create credential with type OpenShift or Kubernetes API Endpoint using the ansible service account token you just created and the cluster API URL (ensure there are no trailing spaces in the API URL)
-9. Create Project using this Github Repo (or your fork) https://github.com/ktatro-rh/ansible-ci-cd-demo
-10. Create inventory openshift with host: {'ansible_host': '127.0.0.1', 'ansible_connection': 'local'}
-11. Create Job Templates with Job Type: Run, Inventory: openshift, Project ktatro-demo, Default Execution Environment, Kubernetes Bearer Token
+1. Login to AAP and create a project using this GitHub Repo or a fork: https://github.com/ktatro-rh/osv-ci-cd-demo
+2. Create Job Templates for the following:
     
     | Template Name             | Playbook                                  | Survey                     | Extra Variables        |  
     |---------------------------|-------------------------------------------|----------------------------|------------------------|
     | create-namespaces         | playbooks/create-namespaces.yaml          | -                          | -                      |
-    | create-pipeline           | playbooks/create-openshift-pipeline       | aap_password, aap_base_url, github_url, workflow_id | -                      | 
-    | job-deploy-hello-app-prod | playbooks/hello-app-deploy.yaml           | -                          | namespace: demo-prod   | 
-    | job-deploy-hello-app-test | playbooks/hello-app-deploy.yaml           | -                          | namespace: demo-test   | 
-    | promote-image-to-prod     | playbooks/hello-app-promote-image.yaml    | -                          | CHECK PROMPT ON LAUNCH |
+    | install-pipelines         | playbooks/install-openshift-pipelines-operator.yml || -                | -                      |
+    | create -pipline           | create-openshift-pipline.yml              | Aap_password, aap_base_url, github_url, workflow_id | -| 
+    | create-vm                 | playbooks/                                | -                          | namespace: demo-test   | 
+    | validate-deployment       | playbooks/                                | -                          | -                      |
+    | cutover-vm-and-clean-up   | playbooks/                                | -                          | -                      |
+    | start artifact repo       | playbooks/                                | -                          | -                      |
+    | stop artifact repo        | playbooks/                                | -                          | -                      |
 
-12. Create Workflow Template with Job Type: Run, Inventory: openshift, Extra variables: CHECK PROMPT ON LAUNCH
+3. Create Workflow Template with Job Type: Run, Inventory: openshift, Extra variables: CHECK PROMPT ON LAUNCH
 
-    [job-deploy-hello-app-test] -> [Approval to promote to production (Approval Step)] -> [promote-image-to-prod] -> [job-deploy-hello-app-prod] 
+    [start artifact repo] -> [create-vm] -> [validate-deployment] -> [cutover-vm-and-clean-up] -> [validate-deployment] -> [stop artifact repo] 
 
-13. Run Playbooks create-namespaces, create-pipeline. Note github_url is for the node application you will be building, not the Ansible Repo. workflow_id is the workflow id of workflow you created in step 12 (will be in the URL when you view the workflow).
-14. Add Webhook to Github source repo
-15. Check in code to trigger pipeline (or trigger manually)
-16. Navigate to route in test
-17. Approve Production Release in Ansible
-18. Navigate to route in production
+4. Run Playbooks create-namespaces, install-pipelines, create-pipeline. Note github_url is for the node application you will be building, not the Ansible Repo. workflow_id is the workflow id of workflow you created in step 3 (will be in the URL when you view the workflow).
+5. Add Webhook to Github source repo and Trigger to the pipeline that was created in the demo-test namespace
+6. Check in code to trigger pipeline (or trigger manually)
+
 
 ## Playbook/Job Descriptions
 
