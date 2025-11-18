@@ -5,9 +5,8 @@
   gather_facts: false
 
   vars:
-     base_url: apps.cluster-46f6g.dynamic.redhatworkshops.io
-     endpoint: /api/bonjour
-     
+    endpoint: /api/bonjour
+
   tasks:
     - name: Make a GET request to an API
       ansible.builtin.uri:

@@ -37,8 +37,9 @@
     deployment_version: "1_0_0"
 
     #application specifics
-    artifact_base_url: http://artifact-repo-demo-test.apps.cluster-46f6g.dynamic.redhatworkshops.io/
-    
+    artifact_base_url: http://artifact-repo-demo-test.apps.cluster-46f6g.dynamic.redhatworkshops.io
+    app_base_url: apps.cluster-46f6g.dynamic.redhatworkshops.io
+
   tasks:
     - name: get vm
       kubernetes.core.k8s_info:
@@ -81,6 +82,7 @@
           route_name: "{{ route_name }}"
           vm_project: "{{ vm_project }}"
           existing_vm: "{{ existing_vm }}"
+          base_url: "{{ app_base_url }}"
 
     - name: Create virtual machine
       redhat.openshift_virtualization.kubevirt_vm:
