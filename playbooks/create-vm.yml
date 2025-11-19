@@ -39,6 +39,9 @@
     #application specifics
     artifact_base_url: http://artifact-repo-demo-test.apps.cluster-46f6g.dynamic.redhatworkshops.io
     app_base_url: apps.cluster-46f6g.dynamic.redhatworkshops.io
+    
+    # Override this to make it accessible via ssh (survey works well for this)
+    ssh_public_key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKedNAUKIjxWaVPXCu6Khb3Qs22fXSP6qjTQ3ICtGvpg user@machine.that.generated.it
 
   tasks:
     - name: get vm

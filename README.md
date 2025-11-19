@@ -11,30 +11,33 @@ These are the steps for setting up the AAP CI/CD Demo on from the Day 2 Operatio
     
     | Template Name             | Playbook                                  | Survey                     | Extra Variables        |  
     |---------------------------|-------------------------------------------|----------------------------|------------------------|
-    | create-namespaces         | playbooks/create-namespaces.yaml          | -                          | -                      |
+    | create-namespaces         | playbooks/create-namespaces.yml           | -                          | -                      |
     | install-pipelines         | playbooks/install-openshift-pipelines-operator.yml || -                | -                      |
-    | create -pipline           | create-openshift-pipline.yml              | Aap_password, aap_base_url, github_url, workflow_id | -| 
-    | create-vm                 | playbooks/                                | -                          | namespace: demo-test   | 
-    | validate-deployment       | playbooks/                                | -                          | -                      |
-    | cutover-vm-and-clean-up   | playbooks/                                | -                          | -                      |
-    | start artifact repo       | playbooks/                                | -                          | -                      |
-    | stop artifact repo        | playbooks/                                | -                          | -                      |
-
+    | create-pipline            | create-openshift-pipline.yml              | Aap_password, aap_base_url, github_url, workflow_id, base_url, app_base_url, artifact_base_url | -| 
+    | create-vm                 | playbooks/create-vm.yml                   | ssh_public_key             | -                      | 
+    | validate-deployment       | playbooks/validate-deployment.yml         | -                          | -                      |
+    | cutover-vm-and-clean-up   | playbooks/update-vm.yml                   | -                          | -                      |
+    | start artifact repo       | playbooks/artifact-repo-state.yml         | -                          | -                      |
+    | stop artifact repo        | playbooks/artifact-repo-state.yml         | -                          | -                      |
+3. Generate a public / private key (optional) to allow ssh. 
 3. Create Workflow Template with Job Type: Run, Inventory: openshift, Extra variables: CHECK PROMPT ON LAUNCH
 
     [start artifact repo] -> [create-vm] -> [validate-deployment] -> [cutover-vm-and-clean-up] -> [validate-deployment] -> [stop artifact repo] 
 
 4. Run Playbooks create-namespaces, install-pipelines, create-pipeline. Note github_url is for the node application you will be building, not the Ansible Repo. workflow_id is the workflow id of workflow you created in step 3 (will be in the URL when you view the workflow).
-5. Add Webhook to Github source repo and Trigger to the pipeline that was created in the demo-test namespace
-6. Check in code to trigger pipeline (or trigger manually)
+5. Create the trigger on the pipeline (manual)
+6. Add Webhook to Github source repo and Trigger to the pipeline that was created in the demo-test namespace
+7. Check in code to trigger pipeline (or trigger manually)
 
 
 ## Playbook/Job Descriptions
 
 ### One Shots run from Ansible
 create-namespaces  - Run once to create demo-test and demo-prod namespaces  
-create-pipeline  - Run once to create pipeline, custom tasks, aap credentials secret, etc.
+create-openshift-pipeline  - Run once to create pipeline, custom tasks, aap credentials secret, etc.
+install-openshift-pipelines-operator - Run to install openshift pipelines
 ### Called from workflow (initiated by Openshift Pipeline)  
-job-deploy-hello-app-test - Creates / Updates deployment, service, and route in demo-test  
-job-deploy-hello-app-prod - Creates / Updates deployment, service, and route in demo-prod  
-promote-image-to-prod  - Moves a specific image tag from demo-test to demo-prod  
+artifact-repo-state - starts or stops the artifact repo  
+create-vm - Creates vm in demo-test
+update-vm - does the cutover by updating the service. cleans up temporary resources and old vm.  
+validate-deployment  - curls the url until it comes up.
