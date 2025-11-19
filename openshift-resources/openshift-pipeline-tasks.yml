@@ -39,7 +39,7 @@ spec:
         - '-c'
         - >-
           curl -k -X POST --user $AAP_USER:$AAP_PASSWORD
-          $(inputs.params.baseUrl)/api/v2/workflow_job_templates/$(inputs.params.workflowId)/launch/
+          $(inputs.params.baseUrl)/api/controller/v2/workflow_job_templates/$(inputs.params.workflowId)/launch/
           -H "Content-Type: application/json" -d "$(inputs.params.extra_vars_json)"
       env:
         - name: AAP_USER
